@@ -6,7 +6,7 @@
 /*
 Plugin Name: WP Trigger Gatsby Preview
 Plugin URI: https://github.com/gglukmann/wp-trigger-gatsby-preview
-Description: Save or update action triggers Gatsby Preview webhook
+Description: Save or update action triggers Gatsby Cloud Preview webhook.
 Version: 1.0.0
 Author: Gert Glükmann
 Author URI: https://github.com/gglukmann
