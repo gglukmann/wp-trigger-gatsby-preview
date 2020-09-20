@@ -1,10 +1,10 @@
 # wp-trigger-gatsby-preview
 
-Plugin for Wordpress.
+Plugin for WordPress.
 Save or update action triggers Gatsby Cloud Preview webhook.
 
-### Installation
+## Installation
 
-- Add to Wordpress and activate
+- Add to WordPress and activate
 - Go to Settings -> General and scroll to bottom
 - Add webhook url
