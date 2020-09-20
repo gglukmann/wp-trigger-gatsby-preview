@@ -7,7 +7,7 @@
 Plugin Name: WP Trigger Gatsby Preview
 Plugin URI: https://github.com/gglukmann/wp-trigger-gatsby-preview
 Description: Save or update action triggers Gatsby Cloud Preview webhook.
-Version: 1.0.0
+Version: 1.1.0
 Author: Gert Glükmann
 Author URI: https://github.com/gglukmann
 License: GPLv3
@@ -22,14 +22,14 @@ class WPTriggerGatsbyPreview
 {
   function __construct()
   {
-    add_action('admin_init', array($this, 'general_settings_section'));
-    add_action('save_post', array($this, 'run_hook'), 10, 3);
+    add_action('admin_init', [$this, 'generalSettingsSection']);
+    add_action('save_post', [$this, 'runHook'], 10, 3);
   }
 
   public function activate()
   {
     flush_rewrite_rules();
-    $this->general_settings_section();
+    $this->generalSettingsSection();
   }
 
   public function deactivate()
@@ -37,12 +37,12 @@ class WPTriggerGatsbyPreview
     flush_rewrite_rules();
   }
 
-  function run_hook($post_id)
+  function runHook($post_id)
   {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (!(wp_is_post_revision($post_id) || wp_is_post_autosave($post_id))) return;
+    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) return;
 
-    $webhook = get_option('option_webhook');
+    $webhook = get_option('gp_option_webhook');
 
     if ($webhook) {
       $url = $webhook;
@@ -54,34 +54,32 @@ class WPTriggerGatsbyPreview
     }
   }
 
-  function general_settings_section()
+  function generalSettingsSection()
   {
     add_settings_section(
-      'general_settings_section',
+      'gp_general_settings_section',
       'WP Trigger Gatsby Cloud Preview',
-      array($this, 'my_section_options_callback'),
+      [$this, 'mySectionOptionsCallback'],
       'general'
     );
     add_settings_field(
-      'option_webhook',
+      'gp_option_webhook',
       'Webhook',
-      array($this, 'my_textbox_callback'),
+      [$this, 'myTextboxCallback'],
       'general',
-      'general_settings_section',
-      array(
-        'option_webhook'
-      )
+      'gp_general_settings_section',
+      ['gp_option_webhook']
     );
 
-    register_setting('general', 'option_webhook', 'esc_attr');
+    register_setting('general', 'gp_option_webhook', 'esc_attr');
   }
 
-  function my_section_options_callback()
+  function mySectionOptionsCallback()
   {
     echo '<p>Add webhook url. You can find it from Site Settings in Gatsby Cloud.</p>';
   }
 
-  function my_textbox_callback($args)
+  function myTextboxCallback($args)
   {
     $option = get_option($args[0]);
     echo '<input type="text" id="' . $args[0] . '" name="' . $args[0] . '" value="' . $option . '" />';
